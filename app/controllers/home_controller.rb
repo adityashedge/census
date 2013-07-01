@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def show
-    @survey= Survey.find(params[:id]) 
+    p params
+    @survey= Survey.find(params[:id])
   end
 end
