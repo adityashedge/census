@@ -1,0 +1,26 @@
+%h1 Survey Index
+
+%table
+  %thead
+    %tr
+      %th NAME
+      %th EDIT
+      %th DELETE
+      %th SHOW
+      %th TAKE THE SURVEY
+  %tbody
+    -@surveys.each do |survey|
+      %tr
+        %td
+          =survey.name
+        %td
+          =link_to "Edit", edit_survey_path(survey.id)
+        %td
+          =link_to "Delete", survey_path(survey.id), method: "delete"
+        %td
+          =link_to "Show", survey
+        %td
+          =link_to "Take the survey", home_path(survey.id)
+
+%br    
+=link_to "Create a new survey", new_survey_path

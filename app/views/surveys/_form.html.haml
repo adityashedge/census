@@ -1,0 +1,39 @@
+=nested_form_for @survey do |s|
+
+  - @survey.errors.messages.methods
+  - @survey.errors.full_messages.each do |errmsg|
+    = errmsg.prepend("Error: ")
+    %br
+  
+  %br
+  = s.label :Name
+  = s.text_field :name
+
+  %br
+  = s.label :Type
+  = s.text_field :stype
+
+  %br
+  = s.label :Year
+  = s.text_field :year
+
+  %br
+  = s.label :Location
+  = s.text_field :location
+
+  = s.fields_for :questions do |q|
+    = q.label :Question
+    = q.text_field :desc
+    = q.link_to_remove "remove this question"
+    %br
+    = q.fields_for :options do |opt|
+      = opt.label :Option
+      = opt.text_field :desc
+      
+    = q.link_to_add "Add a option", :options
+  = s.link_to_add "Add a question", :questions
+  
+  %br
+  = s.submit
+
+

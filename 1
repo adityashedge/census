@@ -1,0 +1,129 @@
+diff --git a/census/app/models/option.rb b/census/app/models/option.rb
+index 9bd5567..0e76af7 100644
+--- a/census/app/models/option.rb
++++ b/census/app/models/option.rb
+@@ -1,7 +1,7 @@
+ class Option < ActiveRecord::Base
+   attr_accessible :desc, :question_id
+   validates :desc, presence: true
+-  #validates :desc, length: {minimum: 5, message: 'too short'} 
++  validates :desc, length: {minimum: 3, message: 'too short'} 
+   validates :desc, uniqueness: {scope: :question_id, message: 'Every question should have unique options'}
+   belongs_to :question
+   belongs_to :survey
+diff --git a/census/app/models/question.rb b/census/app/models/question.rb
+index 1dcd382..0b26e5e 100644
+--- a/census/app/models/question.rb
++++ b/census/app/models/question.rb
+@@ -9,5 +9,4 @@ class Question < ActiveRecord::Base
+   has_many :options #, dependent: :destroy
+   
+   accepts_nested_attributes_for :options
+-
+ end
+diff --git a/census/app/models/user.rb b/census/app/models/user.rb
+index 2ed4e80..329f9d7 100644
+--- a/census/app/models/user.rb
++++ b/census/app/models/user.rb
+@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
+   # Setup accessible (or protected) attributes for your model
+   attr_accessible :name, :email, :password, :password_confirmation, :remember_me
+ 
+-  #validates :name, :email, :password, presence: true
++  validates :name, :email, :password, presence: true
+   validates :name, length: {minimum: 5, message: "Too short"}
+   validates :password, length: {minimum: 5, message: "Too short"}
+   validates :password, confirmation: true
+diff --git a/census/app/views/layouts/application.html.erb b/census/app/views/layouts/application.html.erb
+deleted file mode 100644
+index 42dfd8f..0000000
+--- a/census/app/views/layouts/application.html.erb
++++ /dev/null
+@@ -1,14 +0,0 @@
+-<!DOCTYPE html>
+-<html>
+-<head>
+-  <title>Census</title>
+-  <%= stylesheet_link_tag    "application", :media => "all" %>
+-  <%= javascript_include_tag "application" %>
+-  <%= csrf_meta_tags %>
+-</head>
+-<body>
+-
+-<%= yield %>
+-
+-</body>
+-</html>
+diff --git a/census/app/views/layouts/application.html.haml~ b/census/app/views/layouts/application.html.haml~
+deleted file mode 100644
+index eac63b4..0000000
+--- a/census/app/views/layouts/application.html.haml~
++++ /dev/null
+@@ -1,26 +0,0 @@
+-%html
+-  %head>
+-    %title Census
+-    = stylesheet_link_tag    "application", :media => "all"
+-    = javascript_include_tag "application" 
+-    = javascript_include_tag :defaults, "nested_form"
+-    = csrf_meta_tags 
+-    %p.navbar-text.pull-right
+-  - if user_signed_in?
+-    Logged in as
+-    = succeed "." do
+-      %strong= current_user.email
+-    = link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link'
+-    |
+-    \#{link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'}
+-  - else
+-    = link_to "Sign up", new_user_registration_path, :class => 'navbar-link'
+-    |
+-    \#{link_to "Login", new_user_session_path, :class => 'navbar-link'} 
+-
+-  %body
+-    - if notice
+-      %p.alert.alert-notice= notice
+-      - if alert
+-        %p.alert.alert-error= alert
+-    = yield
+diff --git a/census/config/environments/development.rb b/census/config/environments/development.rb
+index acf2345..b1d5204 100644
+--- a/census/config/environments/development.rb
++++ b/census/config/environments/development.rb
+@@ -34,8 +34,5 @@ Census::Application.configure do
+ 
+   # Expands the lines which load the assets
+   config.assets.debug = true
+-
+   config.action_mailer.default_url_options = { :host => 'localhost:3000/surveys' }
+-  #root :to => "surveys#index"
+-
+ end
+diff --git a/census/config/routes.rb b/census/config/routes.rb
+index 8d70d9b..33a7748 100644
+--- a/census/config/routes.rb
++++ b/census/config/routes.rb
+@@ -2,8 +2,7 @@ Census::Application.routes.draw do
+   get "log_out" => "sessions#destroy", :as => "log_out"
+   get "log_in" => "sessions#new", :as => "log_in"
+   get "sign_up" => "users#new", :as => "sign_up"
+-  #root :to => "users#new"
+-  match 'user_root' => 'surveys#index'
++  #match 'user_root' => 'surveys#index'
+   root to: 'surveys#index'
+ 
+   devise_for :views
+@@ -70,6 +69,4 @@ Census::Application.routes.draw do
+   # This is a legacy wild controller route that's not recommended for RESTful applications.
+   # Note: This route will make all actions in every controller accessible via GET requests.
+   # match ':controller(/:action(/:id))(.:format)'
+-
+-
+ end
+diff --git a/practice b/practice
+deleted file mode 160000
+index ece54ae..0000000
+--- a/practice
++++ /dev/null
+@@ -1 +0,0 @@
+-Subproject commit ece54ae517a60705db4500ccfe0827f8adced147

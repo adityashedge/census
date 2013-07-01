@@ -1,0 +1,24 @@
+%br
+Survey name:
+= @survey.name.upcase
+%br
+Survey type:
+= @survey.stype.upcase
+%br
+Survey year:
+= @survey.year
+%br
+Survey location:
+= @survey.location.upcase
+
+%br
+- @survey.questions.each_with_index do |q|
+  %br
+  = q.desc
+  %br
+  - q.options.each_with_index do |opt|
+    = opt.desc
+    %br
+
+
+= link_to "Back to surveys", surveys_path

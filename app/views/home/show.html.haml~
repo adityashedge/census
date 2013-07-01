@@ -1,0 +1,11 @@
+= nested_form_for @survey do |s|
+  = s.name
+  = s.stype
+  = s.year
+  = s.location
+
+  = s.fields_for :questions do |q|
+    = q.desc
+    = q.fields_for :options do |opt|
+      = opt.radio_button "Option: #{opt.desc}"
+
