@@ -1,29 +1,25 @@
-%h1 Take survey 
-
-%br
-SURVEY NAME:
-= @survey.name
-%br
-SURVEY TYPE:
-= @survey.stype
-%br
-SURVEY YEAR:
-= @survey.year
-%br
-SURVEY LOCATION:
-= @survey.location
-
-%br
-%br
-= nested_form_for @survey do |s|
-  /- @survey.questions.each do |quest|
-  = s.fields_for :questions do |q|
-    = "#{q.object.desc} :"
-    = q.fields_for :options do |opt|
-      = radio_button :q, "#{q}", false  
-      = q.label "#{opt.object.desc}" 
+%h2 TAKE SURVEY
+= form_for @survey, url: home_index_path, method: "POST" do |survey|
+  Name:
+  = @survey.name
   %br
+  Type:
+  = @survey.stype
+  %br
+  Year:
+  = @survey.year
+  %br
+  Location:
+  = @survey.location
 
-  =link_to "Submit survey", surveys_path
-%br
-= link_to "Back to surveys", surveys_path
+  - @survey.questions.each do |q|
+    %br
+    = q.desc
+    - q.options.each do |opt|
+      %br
+      = radio_button :desc, q.id, opt.id
+      = opt.desc
+  %br
+  = survey.submit :Submit 
+  %br
+  = link_to "Back to surveys", surveys_path

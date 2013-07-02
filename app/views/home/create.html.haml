@@ -1,0 +1,17 @@
+%h3 Your survey results
+
+%br
+= @survey.name
+%br
+= @survey.stype
+%br
+= @survey.year
+%br
+= @survey.location
+%br
+
+- @survey.questions.each do |q|
+  = q.desc
+
+
+
